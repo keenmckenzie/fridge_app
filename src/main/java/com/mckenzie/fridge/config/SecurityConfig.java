@@ -33,10 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/signin").permitAll()
-                .antMatchers(HttpMethod.GET, "/vehicles/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/vehicles/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/v1/vehicles/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                //.antMatchers("/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfigurer(jwtTokenProvider));
