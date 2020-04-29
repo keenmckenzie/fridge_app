@@ -25,6 +25,8 @@ public class ItemController {
 
     @PostMapping("/items")
     public Item createItem(@Valid @RequestBody Item item) {
+        //TODO item.setExpirationDate()
+        item.setExpirationDate();
         return itemRepository.save(item);
     }
 
