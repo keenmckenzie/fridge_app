@@ -46,15 +46,17 @@ public class Item {
     public void setExpirationDate() {
         Date expire;
         Date currDate = new Date();
-        //TODO Create Date as created + daysToExpiration
         Calendar c = Calendar.getInstance();
         c.setTime(currDate);
         c.add(Calendar.DATE, daysToExpiration);
         expire = c.getTime();
 
 
-        //TODO Set expiration
         this.expirationDate = expire;
+    }
+
+    public void updateExpirationDate(Date date) {
+        this.expirationDate = date;
     }
 
     public Integer getDaysToExpiration() {
