@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -22,6 +23,8 @@ public class Item {
     @NotBlank
     private String name;
 
+    private int daysToExpiration;
+
     private Integer count;
 
     @Column(nullable = false, updatable = false)
@@ -33,6 +36,36 @@ public class Item {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date updatedAt;
+
+    private Date expirationDate;
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate() {
+        Date expire;
+        Date currDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currDate);
+        c.add(Calendar.DATE, daysToExpiration);
+        expire = c.getTime();
+
+
+        this.expirationDate = expire;
+    }
+
+    public void updateExpirationDate(Date date) {
+        this.expirationDate = date;
+    }
+
+    public Integer getDaysToExpiration() {
+        return daysToExpiration;
+    }
+
+    public void setDaysToExpiration(Integer daysToExpiration) {
+        this.daysToExpiration = daysToExpiration;
+    }
 
     public Long getId() {
         return id;

@@ -25,6 +25,8 @@ public class ItemController {
 
     @PostMapping("/items")
     public Item createItem(@Valid @RequestBody Item item) {
+        //TODO item.setExpirationDate()
+        item.setExpirationDate();
         return itemRepository.save(item);
     }
 
@@ -43,6 +45,8 @@ public class ItemController {
 
         item.setName(itemDetails.getName());
         item.setCount(itemDetails.getCount());
+        item.updateExpirationDate(itemDetails.getExpirationDate());
+
 
         Item updatedItem = itemRepository.save(item);
         return updatedItem;
