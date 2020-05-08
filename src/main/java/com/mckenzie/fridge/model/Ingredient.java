@@ -19,11 +19,6 @@ public class Ingredient {
 
     private int goodFor;
 
-    public Ingredient(Long id, @NotBlank String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public Long getId() {
         return id;
     }
