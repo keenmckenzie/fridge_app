@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Entity
 @Table(name="ingredients")
@@ -18,6 +19,9 @@ public class Ingredient {
     private String name;
 
     private int goodFor;
+
+    @ManyToMany(mappedBy="ingredients")
+    private Set<Recipe> recipes;
 
     public Long getId() {
         return id;
