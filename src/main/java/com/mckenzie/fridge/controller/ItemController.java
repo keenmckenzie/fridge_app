@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = { "*" })
@@ -42,6 +44,22 @@ public class ItemController {
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", name));
     }
 
+    @GetMapping("/items/expiring")
+    public List<Item> getExpiringItems() {
+        Date yesterday;
+        Date tomorrow;
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(calendar.DAY_OF_YEAR, 1);
+        tomorrow = calendar.getTime();
+
+        calendar = Calendar.getInstance();
+        calendar.add(calendar.DAY_OF_YEAR, -1);
+
+        yesterday = calendar.getTime();
+
+        return itemRepository.findByExpirationDateBetween(yesterday, tomorrow);
+    }
+
     @PutMapping("/items/{id}")
     public Item updateNote(@PathVariable(value = "id") Long itemId,
                            @Valid @RequestBody Item itemDetails) {
@@ -67,7 +85,7 @@ public class ItemController {
 
         return ResponseEntity.ok().build();
     }
-    
+
     @DeleteMapping("/itemName/{name}")
     public ResponseEntity<?> deleteItemByName(@PathVariable(value = "name") String name) {
         Item item = itemRepository.findByNameIgnoreCase(name)
