@@ -36,10 +36,10 @@ public class ItemController {
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
     }
 
-    @GetMapping("/itemName/{id}")
-    public Item getItemById2(@PathVariable(value = "id") Long itemId) {
-        return itemRepository.findById(itemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+    @GetMapping("/itemName/{name}")
+    public Item getItemById2(@PathVariable(value = "name") String name) {
+        return itemRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", name));
     }
 
     @PutMapping("/items/{id}")
@@ -62,6 +62,16 @@ public class ItemController {
     public ResponseEntity<?> deleteItem(@PathVariable(value = "id") Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Item", "id", itemId));
+
+        itemRepository.delete(item);
+
+        return ResponseEntity.ok().build();
+    }
+    
+    @DeleteMapping("/itemName/{name}")
+    public ResponseEntity<?> deleteItemByName(@PathVariable(value = "name") String name) {
+        Item item = itemRepository.findByNameIgnoreCase(name)
+                .orElseThrow(() -> new ResourceNotFoundException("Item", "id", name));
 
         itemRepository.delete(item);
 
