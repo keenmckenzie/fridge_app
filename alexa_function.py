@@ -102,27 +102,24 @@ class GetSpecificFactHandler(AbstractRequestHandler):
             SimpleCard(SKILL_NAME, specific_fact))
         return handler_input.response_builder.response
 
-class GetApiRequestHandler(AbstractRequestHandler):
-    """Handler for GetApiRequestIntent."""
+class AddItemHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        return (is_intent_name("GetApiRequestIntent")(handler_input))
-    
-    def handle(self, handler_input):
-        logger.info("In API handler")
-        item_names = ""
-        url = "http://fridge.mckenzie-house.com/api/items"
-        response = requests.get(url)
-        if response.status_code == 200:
-            items = response.json()
+        return (is_intent_name("AddItemIntent")(handler_input))
         
-        for item in items:
-            item_names = item_names + item['name']+", "
-        speech = item_names
+    def handle(self, handler_input):
+        logger.info("In AddItemHandler")        
+        slots = handler_input.request_envelope.request.intent.slots
+        logger.info(slots)
+        item = slots['item'].value
+        days = slots['days'].value
+        count = slots['count'].value
+        payload = {"name": item, "count": count, "daysToExpiration": days}
+        logger.info(payload)
+        post = requests.post('http://fridge.mckenzie-house.com/api/items', json=payload)
+        speech = "Added " + item + " to fridge"
         handler_input.response_builder.speak(speech).set_card(
-            SimpleCard(SKILL_NAME, "Items"))
+            SimpleCard(SKILL_NAME, "Add Item"))
         return handler_input.response_builder.response
-            
-
 
 class HelpIntentHandler(AbstractRequestHandler):
     """Handler for Help Intent."""
@@ -230,7 +227,7 @@ class ResponseLogger(AbstractResponseInterceptor):
 sb.add_request_handler(LaunchRequestHandler())
 sb.add_request_handler(GetNewFactHandler())
 sb.add_request_handler(GetSpecificFactHandler())
-sb.add_request_handler(GetApiRequestHandler())
+sb.add_request_handler(AddItemHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
