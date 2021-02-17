@@ -13,7 +13,7 @@ class FridgeApp extends Component {
         return (
             <Router>
                 <>
-                    <h1>Fridge Application</h1>
+                    <h1>McKenzie House</h1>
                     <Switch>
                         <Route path="/" exact component={ListItemsComponent} />
                         <Route path="/items" exact component={ListItemsComponent} />
